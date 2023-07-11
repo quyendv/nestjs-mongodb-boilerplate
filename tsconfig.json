@@ -16,6 +16,12 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "~modules/*": ["src/modules/*"],
+      "~configs/*": ["src/configs/*"],
+      "~repositories/*": ["src/repositories/*"],
+      "~schemas/*": ["src/schemas/*"]
+    }
   }
 }
