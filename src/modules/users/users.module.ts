@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule, getModelToken } from '@nestjs/mongoose';
 import { Collection } from 'mongoose';
+import { UserRolesModule } from '~modules/user-roles/user-roles.module';
 import { CollectionSchema } from '../collections/entities/collection.entity';
 import { FlashCard, FlashCardSchema } from '../flash-cards/entities/flash-card.entity';
 import { User, UserSchemaFactory } from './entities/user.entity';
@@ -23,6 +24,7 @@ import { UsersService } from './users.service';
         ],
       },
     ]),
+    UserRolesModule, // import for UserRolesService
   ],
   controllers: [UsersController],
   providers: [UsersService, UserRepository], // cần cho các DI

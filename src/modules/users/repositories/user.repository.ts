@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { FilterQuery, Model, PopulateOptions } from 'mongoose';
 import { BaseRepository } from 'src/base/repositories/base.repository';
-import { User } from '~modules/users/entities/user.entity';
+import { FindAllResponse } from 'src/types/common.type';
+import { User, UserDocument } from '~modules/users/entities/user.entity';
 
 @Injectable() // Injectable để nestjs hiểu nó là 1 DI provider, có thể khởi tạo trực tiếp trong class khác bằng DI (giống như service được khởi tạo DI trong controller, và repository thì đc khởi tạo DI trong Service) -> cần đưa vào provider (k phải import) của module
 export class UserRepository extends BaseRepository<User> {
@@ -14,4 +15,19 @@ export class UserRepository extends BaseRepository<User> {
     super(userModel); // tuy nhiên lớp cha dùng private readonly nên không this.model được
   }
   // TODO: Cần thêm fn gì riêng ngoài các fn class cha, dựa trên userModel vừa đc DI mới
+
+  async findAllWithSubFields(
+    condition: FilterQuery<UserDocument>,
+    projection?: string,
+    populate?: string[] | PopulateOptions | PopulateOptions[],
+  ): Promise<FindAllResponse<UserDocument>> {
+    const [count, items] = await Promise.all([
+      this.userModel.count({ ...condition, deletedAt: null }),
+      this.userModel.find({ ...condition, deletedAt: null }, projection).populate(populate), // nếu là string[] thì ...populate ra, VD: populate('key1 key2', 'sel1 sel2')
+    ]);
+    return {
+      count,
+      items,
+    };
+  }
 }

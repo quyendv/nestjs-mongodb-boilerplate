@@ -1,12 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Exclude, Expose, Transform, Type } from 'class-transformer';
 import { NextFunction } from 'express';
 import mongoose, { HydratedDocument, Model } from 'mongoose';
 import { BaseEntity } from 'src/base/entities/base.entity';
 import { schemaOptions } from 'src/configs/schema.config';
 import { CollectionDocument } from '~modules/collections/entities/collection.entity';
-import { Address, AddressSchema } from './address.entity';
-import { UserRole } from '~modules/user-roles/entities/user-role.entity';
 import { FlashCardDocument } from '~modules/flash-cards/entities/flash-card.entity';
+import { UserRole } from '~modules/user-roles/entities/user-role.entity';
+import { Address, AddressSchema } from './address.entity';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -14,6 +15,14 @@ export enum GENDER {
   Male = 'MALE',
   Female = 'FEMALE',
   Other = 'OTHER',
+}
+
+export enum LANGUAGES {
+  ENGLISH = 'English',
+  FRENCH = 'French',
+  JAPANESE = 'Japanese',
+  KOREAN = 'Korean',
+  SPANISH = 'Spanish',
 }
 @Schema({ ...schemaOptions, virtuals: true })
 export class User extends BaseEntity {
@@ -42,7 +51,14 @@ export class User extends BaseEntity {
     unique: true,
     match: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
   })
+  // @Expose({ name: 'mail', toPlainOnly: true }) // NOTE: đổi tên sang mail, tuy nhiên phải thêm toPlainOnly nếu k sẽ mất thay vì đổi tên // toPlain là từ dataModel (Document) trả về json ở response
   email: string;
+
+  @Prop({
+    type: [String],
+    enum: LANGUAGES,
+  })
+  interestedLanguages: LANGUAGES[];
 
   @Prop({
     match: /^([+]\d{2})?\d{10}$/,
@@ -74,7 +90,7 @@ export class User extends BaseEntity {
   avatar?: string;
 
   @Prop()
-  date_of_birth?: Date;
+  dateOfBirth?: Date;
 
   @Prop({
     enum: GENDER,
@@ -89,6 +105,14 @@ export class User extends BaseEntity {
     type: mongoose.Schema.Types.ObjectId,
     ref: UserRole.name,
   })
+  @Type(() => UserRole)
+  @Transform(
+    (value) => {
+      // console.log(value); // NOTE {value, key, obj} -> Làm transform toObjectid mà k để ý obj
+      return value.obj.role?.name; // trả về mỗi role: "USER"
+    },
+    { toClassOnly: true }, // chỉ được áp dụng khi chuyển đổi từ dữ liệu JSON (plain object) thành instance của class (toClassOnly) -> plainToClass trong MongooseClassSerializerInterceptor ở controller
+  )
   role: UserRole;
 
   @Prop()
@@ -98,9 +122,22 @@ export class User extends BaseEntity {
   friendlyId?: number;
 
   @Prop({
-    type: AddressSchema,
+    type: [{ type: AddressSchema }],
   })
-  address: Address;
+  @Type(() => Address) // NOTE chỉ rõ Type để bên trong Address có exclude cũng hoạt động được
+  address: Address[];
+
+  @Prop({
+    default: 'cus_mock_id',
+  })
+  @Exclude() // NOTE: loại bỏ khỏi quá trình serialization(transform to json/xml) | deserialization(json/xml to instance class) -> đi kèm ClassSerializerInterceptor trong controller (nhưng mongoose cần config thêm do k tương thích)
+  stripeCustomerId: string;
+
+  // Lưu ý nếu dùng với property: https://viblo.asia/p/setup-boilerplate-cho-du-an-nestjs-phan-3-request-validation-voi-class-validator-va-response-serialization-voi-class-transformer-AZoJjXROVY7#_exposing-properties-with-different-names-15, https://www.npmjs.com/package/class-transformer#exposing-properties-with-different-names
+  @Expose({ name: 'fullName' })
+  get fullName(): string {
+    return `${this.firstName} ${this.lastName}`;
+  }
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
@@ -125,9 +162,17 @@ export const UserSchemaFactory = (
     return next(); // nên dùng return để tránh thực thi đoạn code dưới next() nếu có, gây lỗi ngoài ý muốn
   });
 
-  // Phải set virtuals: true trong toJson &| toObject
-  user_schema.virtual('fullname').get(function (this: UserDocument) {
-    return this.firstName + ' ' + this.lastName;
+  // Phải set virtuals: true trong toJson &| toObject // NOTE: dùng Expose classTransformer
+  // user_schema.virtual('fullname').get(function (this: UserDocument) {
+  //   return this.firstName + ' ' + this.lastName;
+  // });
+
+  user_schema.virtual('defaultAddress').get(function (this: UserDocument) {
+    if (this.address.length) {
+      return `${(this.address[0].street && ' ') || ''}${this.address[0].city} ${
+        this.address[0].state
+      } ${this.address[0].country}`;
+    }
   });
 
   return user_schema;

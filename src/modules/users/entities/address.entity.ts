@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Exclude } from 'class-transformer';
 import { HydratedDocument } from 'mongoose';
 import { BaseEntity } from 'src/base/entities/base.entity';
 import { schemaOptions } from 'src/configs/schema.config';
@@ -17,6 +18,7 @@ export class Address extends BaseEntity {
   city: string;
 
   @Prop({ minlength: 2, maxlength: 50 })
+  @Exclude() // trong user.entity phải thêm Type(() => Address) mới chạy
   postalCode?: number;
 
   @Prop({ required: true, minlength: 2, maxlength: 50 })
