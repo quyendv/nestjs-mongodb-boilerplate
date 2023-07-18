@@ -4,6 +4,7 @@ import { Collection } from 'mongoose';
 import { CollectionSchema } from '../collections/entities/collection.entity';
 import { FlashCard, FlashCardSchema } from '../flash-cards/entities/flash-card.entity';
 import { User, UserSchemaFactory } from './entities/user.entity';
+import { UserRepository } from './repositories/user.repository';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
@@ -24,6 +25,6 @@ import { UsersService } from './users.service';
     ]),
   ],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, UserRepository], // cần cho các DI
 })
 export class UsersModule {}
