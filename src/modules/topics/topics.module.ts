@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Topic, TopicSchema } from '../../schemas/topic.schema';
+import { Topic, TopicSchema } from './entities/topic.entity';
 import { TopicsController } from './topics.controller';
 import { TopicsService } from './topics.service';
 

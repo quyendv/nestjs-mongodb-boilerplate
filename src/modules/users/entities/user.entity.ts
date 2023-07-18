@@ -3,10 +3,10 @@ import { NextFunction } from 'express';
 import mongoose, { HydratedDocument, Model } from 'mongoose';
 import { BaseEntity } from 'src/base/entities/base.entity';
 import { schemaOptions } from 'src/configs/schema.config';
-import { CollectionDocument } from 'src/schemas/collection.schema';
-import { FlashCardDocument } from 'src/schemas/flash-card.schema';
-import { UserRole } from 'src/schemas/user-role.schema';
-import { Address, AddressSchema } from './address.schema';
+import { CollectionDocument } from '~modules/collections/entities/collection.entity';
+import { Address, AddressSchema } from './address.entity';
+import { UserRole } from '~modules/user-roles/entities/user-role.entity';
+import { FlashCardDocument } from '~modules/flash-cards/entities/flash-card.entity';
 
 export type UserDocument = HydratedDocument<User>;
 

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule, getModelToken } from '@nestjs/mongoose';
 import { Collection } from 'mongoose';
-import { CollectionSchema } from '../../schemas/collection.schema';
-import { FlashCard, FlashCardSchema } from '../../schemas/flash-card.schema';
-import { User, UserSchemaFactory } from '../../schemas/user.schema';
+import { CollectionSchema } from '../collections/entities/collection.entity';
+import { FlashCard, FlashCardSchema } from '../flash-cards/entities/flash-card.entity';
+import { User, UserSchemaFactory } from './entities/user.entity';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 

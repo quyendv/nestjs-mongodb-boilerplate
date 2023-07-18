@@ -2,8 +2,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
 import { BaseEntity } from 'src/base/entities/base.entity';
 import { schemaOptions } from 'src/configs/schema.config';
-import { Topic } from 'src/schemas/topic.schema';
-import { User } from 'src/schemas/user.schema';
+import { Topic } from '~modules/topics/entities/topic.entity';
+import { User } from '~modules/users/entities/user.entity';
 
 export type FlashCardDocument = HydratedDocument<FlashCard>;
 

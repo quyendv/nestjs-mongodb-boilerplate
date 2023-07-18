@@ -20,7 +20,7 @@
     "paths": {
       "~modules/*": ["src/modules/*"],
       "~configs/*": ["src/configs/*"],
-      "~repositories/*": ["src/repositories/*"],
+      "~repositories/*": ["src/modules/users/repositories/*"],
       "~schemas/*": ["src/schemas/*"]
     }
   }

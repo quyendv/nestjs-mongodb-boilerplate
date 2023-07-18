@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { FlashCard, FlashCardSchema } from '../../schemas/flash-card.schema';
+import { FlashCard, FlashCardSchema } from './entities/flash-card.entity';
 import { FlashCardsController } from './flash-cards.controller';
 import { FlashCardsService } from './flash-cards.service';
 
