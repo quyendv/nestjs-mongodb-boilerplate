@@ -24,7 +24,7 @@ export enum LANGUAGES {
   KOREAN = 'Korean',
   SPANISH = 'Spanish',
 }
-@Schema({ ...schemaOptions, virtuals: true })
+@Schema({ ...schemaOptions })
 export class User extends BaseEntity {
   @Prop({
     required: true,

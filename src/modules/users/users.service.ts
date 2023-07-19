@@ -22,7 +22,7 @@ export class UsersService extends BaseService<User, UserRepository> {
     if (!userRole) {
       userRole = await this.userRolesService.create({ name: USER_ROLE.USER });
     }
-    const user = await this.userRepository.create({ ...createUserDto, role: userRole });
+    const user = await this.userRepository.create({ ...createUserDto, role: userRole }); // NOTE: không cần gán "._id", truyền thẳng Object: Mongoose sẽ tự động chuyển đổi đối tượng UserRole thành ObjectId tương ứng khi lưu vào cơ sở dữ liệu.
     return user;
   }
 
