@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model, PopulateOptions } from 'mongoose';
 import { BaseRepository } from 'src/base/repositories/base.repository';
 import { FindAllResponse } from 'src/types/common.type';
+import { UserRole } from '~modules/user-roles/entities/user-role.entity';
 import { User, UserDocument } from '~modules/users/entities/user.entity';
 
 @Injectable() // Injectable để nestjs hiểu nó là 1 DI provider, có thể khởi tạo trực tiếp trong class khác bằng DI (giống như service được khởi tạo DI trong controller, và repository thì đc khởi tạo DI trong Service) -> cần đưa vào provider (k phải import) của module
@@ -29,5 +30,11 @@ export class UserRepository extends BaseRepository<User> {
       count,
       items,
     };
+  }
+
+  async getUserWithRole(userId: string): Promise<User> {
+    return await this.userModel
+      .findById(userId, '-password')
+      .populate([{ path: 'role', transform: (role: UserRole) => role?.name }]); // NOTE: không biết có transform kiểu này -> có thể thay cho @Transform(...) trong entity với @UseInterceptors(MongooseClassSerializerInterceptor(User))
   }
 }

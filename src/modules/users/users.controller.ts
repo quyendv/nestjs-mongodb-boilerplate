@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -8,8 +9,11 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { Roles } from 'src/decorators/role.decorator';
 import MongooseClassSerializerInterceptor from 'src/interceptors/mongoose-class-serializer.intereptor';
 import { JwtAccessTokenGuard } from '~modules/auth/guards/jwt-at.guard';
+import { RolesGuard } from '~modules/auth/guards/roles.guard';
+import { USER_ROLE } from '~modules/user-roles/entities/user-role.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -38,5 +42,13 @@ export class UsersController {
   @Get()
   findAll() {
     return this.usersService.findAll();
+  }
+
+  @Delete(':id')
+  @Roles(USER_ROLE.ADMIN) // NOTE: phải đặt trước JwtAccessTokenGuard vì Request Lifecycle các guard trong cùng scope thực thi từ dưới lên (cần JwtAccessTokenGuard lấy thông tin user trước) -> Không đúng role throw Forbidden 403
+  @UseGuards(RolesGuard)
+  @UseGuards(JwtAccessTokenGuard)
+  remove(@Param('id') id: string) {
+    return this.usersService.remove(id);
   }
 }

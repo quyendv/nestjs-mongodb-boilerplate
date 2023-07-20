@@ -15,6 +15,7 @@ export class JwtAccessTokenStrategy extends PassportStrategy(Strategy) /* defaul
   }
 
   async validate(payload: TokenPayload) {
-    return await this.usersService.findOneById(payload.sub); // sub refer passed userId in signIn/signUp passed
+    return await this.usersService.getUserWithRole(payload.sub); // sub refer passed userId in signIn/signUp passed
+    // user có dạng: user: {..., role: 'User'}
   }
 }

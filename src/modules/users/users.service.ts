@@ -34,4 +34,8 @@ export class UsersService extends BaseService<User, UserRepository> {
   async setRefreshToken(id: string, hashedToken: string): Promise<void> {
     await this.userRepository.update(id, { refreshToken: hashedToken });
   }
+
+  async getUserWithRole(userId: string): Promise<User> {
+    return await this.userRepository.getUserWithRole(userId);
+  }
 }
