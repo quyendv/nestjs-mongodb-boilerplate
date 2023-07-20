@@ -134,6 +134,10 @@ export class User extends BaseEntity {
   @Exclude() // NOTE: loại bỏ khỏi quá trình serialization(transform to json/xml) | deserialization(json/xml to instance class) -> đi kèm ClassSerializerInterceptor trong controller (nhưng mongoose cần config thêm do k tương thích)
   stripeCustomerId: string;
 
+  @Prop()
+  @Exclude()
+  refreshToken: string;
+
   // Lưu ý nếu dùng với property: https://viblo.asia/p/setup-boilerplate-cho-du-an-nestjs-phan-3-request-validation-voi-class-validator-va-response-serialization-voi-class-transformer-AZoJjXROVY7#_exposing-properties-with-different-names-15, https://www.npmjs.com/package/class-transformer#exposing-properties-with-different-names
   @Expose({ name: 'fullName' })
   get fullName(): string {

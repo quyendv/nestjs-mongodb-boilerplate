@@ -13,7 +13,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   async validate(email: string, password: string) {
     // TODO: handle exception for require email, password (không dùng Dto được)
     const user = await this.authService.getAuthenticatedUser(email, password);
-    if (!user) throw new UnauthorizedException();
+    if (!user) throw new UnauthorizedException(); // throw exception email not found + wrong password rồi nên chỗ này khó xảy ra
     return user; // here pass req.user = user (return value)
   }
 }

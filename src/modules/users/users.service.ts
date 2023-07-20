@@ -30,4 +30,8 @@ export class UsersService extends BaseService<User, UserRepository> {
   async findAll(filter?: object, projection?: string): Promise<FindAllResponse<User>> {
     return await this.userRepository.findAllWithSubFields(filter, projection, { path: 'role' }); // auto get role
   }
+
+  async setRefreshToken(id: string, hashedToken: string): Promise<void> {
+    await this.userRepository.update(id, { refreshToken: hashedToken });
+  }
 }
