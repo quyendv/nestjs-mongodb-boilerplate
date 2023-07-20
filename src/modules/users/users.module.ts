@@ -28,5 +28,6 @@ import { UsersService } from './users.service';
   ],
   controllers: [UsersController],
   providers: [UsersService, UserRepository], // cần cho các DI
+  exports: [UsersService],
 })
 export class UsersModule {}

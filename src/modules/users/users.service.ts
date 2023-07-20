@@ -18,6 +18,7 @@ export class UsersService extends BaseService<User, UserRepository> {
   // TODO: Xây dựng các api/service dựa trên method trong Repository và ModuleService khác (nhớ import/export). Nếu repository không có 1 số method (tương tác với db) cần thì tạo thêm trong repository (trong đó đã tạo thêm model riêng rồi)
 
   async create(createUserDto: CreateUserDto) {
+    // TODO: check email (username) existed // nhưng mà thường tạo ở auth, nên check ở auth trước cũng được
     let userRole = await this.userRolesService.findOneByConditions({ name: USER_ROLE.USER });
     if (!userRole) {
       userRole = await this.userRolesService.create({ name: USER_ROLE.USER });
@@ -27,6 +28,6 @@ export class UsersService extends BaseService<User, UserRepository> {
   }
 
   async findAll(filter?: object, projection?: string): Promise<FindAllResponse<User>> {
-    return await this.userRepository.findAllWithSubFields(filter, projection, { path: 'role' });
+    return await this.userRepository.findAllWithSubFields(filter, projection, { path: 'role' }); // auto get role
   }
 }

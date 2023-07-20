@@ -11,7 +11,7 @@ export default function MongooseClassSerializerInterceptor(
       if (!(document instanceof Document)) {
         return document;
       }
-      return plainToClass(classToIntercept, document.toJSON(), { excludePrefixes: ['_'] }); // NOTE: loại bỏ _id, _... trước khi chuyển sang instance của class - Nên dùng plainToInstance thay thế plainToClass (ở đây là validate từ request sang Dto nên là toClass)
+      return plainToClass(classToIntercept, document.toJSON(), { excludePrefixes: ['_'] }); // NOTE: loại bỏ _id, _... trước khi chuyển sang instance của class - Nên dùng plainToInstance thay thế plainToClass (chuyển Document sang Json xong từ json sang lại classToIntercept mình muốn -> nên là plainToClass -> mục đích là chuyển từ Document mongoose sang kiểu class mình muốn)
     }
 
     private prepareResponse(

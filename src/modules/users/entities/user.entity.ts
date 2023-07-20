@@ -80,8 +80,9 @@ export class User extends BaseEntity {
 
   @Prop({
     required: true,
-    select: false,
+    // select: false, // NOTE:  Nếu thêm vào thì bất kì api nào cũng không trả về 'password' (kể cả thông qua api khác hay gọi trực tiếp) -> không thể validate được gì
   })
+  @Exclude() // hoặc thêm projection '-password' cho tùy trường hợp
   password: string;
 
   @Prop({
