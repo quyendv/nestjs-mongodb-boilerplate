@@ -9,6 +9,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/decorators/role.decorator';
 import MongooseClassSerializerInterceptor from 'src/interceptors/mongoose-class-serializer.intereptor';
 import { JwtAccessTokenGuard } from '~modules/auth/guards/jwt-at.guard';
@@ -22,6 +23,7 @@ import { UsersService } from './users.service';
 // @UseInterceptors(ClassSerializerInterceptor)
 @UseInterceptors(MongooseClassSerializerInterceptor(User)) // Đặt trước controller để apply all api (hoặc đặt riêng từng api trước các route) -> chỉ kết quả trả về quả controller mới được serialize, nếu gọi service bên trong riêng (trong các module api khác) thì vẫn không serialize
 @Controller('users')
+@ApiTags('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

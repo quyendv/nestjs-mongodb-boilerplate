@@ -1,5 +1,6 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { configSwagger } from '~configs/api-docs.config';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -11,6 +12,8 @@ async function bootstrap() {
       whitelist: true, // clear property not in dto class-validator
     }),
   );
+
+  configSwagger(app);
 
   const PORT = process.env.PORT || 8000;
   await app.listen(PORT, () => {

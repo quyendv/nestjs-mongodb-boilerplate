@@ -1,4 +1,5 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { RequestWithUser } from 'src/types/auth.type';
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/sign-up.dto';
@@ -6,6 +7,7 @@ import { JwtRefreshTokenGuard } from './guards/jwt-rt.guard';
 import { LocalAuthGuard } from './guards/local.guards';
 
 @Controller('auth')
+@ApiTags('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
