@@ -13,7 +13,6 @@ export class RolesGuard implements CanActivate {
       context.getClass(),
     ]);
     const request: RequestWithUser = context.switchToHttp().getRequest(); // lấy request từ context
-    console.log(request.user);
     return roles.includes(request.user.role as unknown as string); // request.user: User convert sang tring 'USER' thôi từ validate của JwtAccessTokenStrategy -> có thể tạo interface mới cho rõ ràng
   }
 }

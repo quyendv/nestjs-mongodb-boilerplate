@@ -9,7 +9,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/decorators/role.decorator';
 import MongooseClassSerializerInterceptor from 'src/interceptors/mongoose-class-serializer.intereptor';
 import { JwtAccessTokenGuard } from '~modules/auth/guards/jwt-at.guard';
@@ -28,6 +28,15 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(RolesGuard)
+  @UseGuards(JwtAccessTokenGuard)
+  @ApiOperation({
+    summary: 'Admin create new user',
+    description: `
+    * Only admin can use this API
+    * Admin create user and give some specific information`,
+  })
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
