@@ -68,7 +68,7 @@ export class AuthService {
     // NOTE: or using await ...signAsync(payload: {sub, ...otherKeys}, { algorithm, secret, expiresIn, ... }) or registry with options in app.module // NOTE: https://docs.nestjs.com/security/authentication#jwt-token
     return this.jwtService.sign(payload, {
       // algorithm: 'RS256', // cần bất đối xứng phần sau
-      secret: 'access_token_secret',
+      secret: process.env.JWT_ACCESS_TOKEN_SECRET,
       expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME, // 60, "2 days", "10h", "7d" -> default number is ms
     });
   }
@@ -76,7 +76,7 @@ export class AuthService {
   generateRefreshToken(payload: TokenPayload): string {
     return this.jwtService.sign(payload, {
       // algorithm: 'RS256', // cần bất đối xứng phần sau
-      secret: 'refresh_token_secret',
+      secret: process.env.JWT_REFRESH_TOKEN_SECRET,
       expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME, // 60, "2 days", "10h", "7d" -> default number is ms
     });
   }

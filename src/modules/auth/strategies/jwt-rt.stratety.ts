@@ -10,7 +10,7 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(Strategy, 'refresh
   constructor(private readonly authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'refresh_token_secret',
+      secretOrKey: process.env.JWT_REFRESH_TOKEN_SECRET,
       passReqToCallback: true, // hàm bên dưới sẽ có thêm tham số Request ở vị trí ĐẦU TIÊN, mặc định sẽ chỉ là (payload, done?)
       // ignoreExpiration: false, // default
     });
