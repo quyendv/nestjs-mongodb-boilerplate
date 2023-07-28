@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/decorators/role.decorator';
-import MongooseClassSerializerInterceptor from 'src/interceptors/mongoose-class-serializer.intereptor';
+import MongooseClassSerializerInterceptor from 'src/interceptors/mongoose-class-serializer.interceptor';
 import { JwtAccessTokenGuard } from '~modules/auth/guards/jwt-at.guard';
 import { RolesGuard } from '~modules/auth/guards/roles.guard';
 import { USER_ROLE } from '~modules/user-roles/entities/user-role.entity';
